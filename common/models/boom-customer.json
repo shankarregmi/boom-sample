@@ -1,0 +1,125 @@
+{
+  "name": "BoomCustomer",
+  "base": "BoomAccount",
+  "strict": true,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "http": {
+    "path": "/customer"
+  },
+  "mixins": {
+    "Readonly": {
+      "_id": true
+    }
+  },
+  "properties": {
+    "_id": {
+      "type": "ObjectID",
+      "id": true,
+      "generated": true
+    },
+    "gender": {
+      "type": "string"
+    },
+    "username": {
+      "type": {
+        "type": false
+      }
+    },
+    "socialMedia": {
+      "type": "SocialMedia"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "fundingEntities": {
+      "type": "hasOne",
+      "model": "BoomCustomerFundingEntities",
+      "foreignKey": "boomCustomerId"
+    },
+    "boomCards": {
+      "type": "hasMany",
+      "model": "BoomCard",
+      "foreignKey": "boomCustomerId",
+      "through": "BoomCardAssignment"
+    },
+    "contact": {
+      "type": "embedsOne",
+      "model": "Person",
+      "polymorphic": "account",
+      "options": {
+        "validate": true,
+        "forceId": true
+      }
+    },
+    "phone": {
+      "type": "embedsOne",
+      "model": "PersonPhone",
+      "polymorphic": "account",
+      "options": {
+        "validate": true,
+        "forceId": true
+      }
+    },
+    "reservations": {
+      "type": "hasMany",
+      "model": "BoomReservation",
+      "foreignKey": "boomCustomerId"
+    },
+    "reviews": {
+      "type": "hasMany",
+      "model": "BoomReview",
+      "foreignKey": "authorId"
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$admin",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "__get__phone"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "register"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "confirmSMS"
+    }
+  ],
+  "methods": []
+}

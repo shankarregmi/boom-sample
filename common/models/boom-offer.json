@@ -1,0 +1,205 @@
+{
+  "name": "BoomOffer",
+  "base": "PersistedModel",
+  "strict": true,
+  "idInjection": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "hidden": [
+    "redeemedQty"
+  ],
+  "http": {
+    "path": "/offer"
+  },
+  "mixins": {
+    "Readonly": {
+      "_id": true
+    }
+  },
+  "scope": {
+    "include": [
+      "locations",
+      "cashBack"
+    ]
+  },
+  "properties": {
+    "_id": {
+      "type": "ObjectID",
+      "id": true,
+      "generated": true
+    },
+    "name": {
+      "type": "string",
+      "required": true,
+      "index": true
+    },
+    "category": {
+      "type": "string",
+      "required": true,
+      "index": true
+    },
+    "price": {
+      "type": "number",
+      "required": true,
+      "index": true,
+      "precision": 5,
+      "scale": 2
+    },
+    "startDate": {
+      "type": "date",
+      "required": true,
+      "index": true
+    },
+    "endDate": {
+      "type": "date",
+      "required": true,
+      "index": true
+    },
+    "maxQty": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "redeemedQty": {
+      "type": "number",
+      "index": true,
+      "default": 0
+    },
+    "conditions": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "tags": {
+      "type": [
+        "string"
+      ],
+      "index": true
+    },
+    "status": {
+      "type": "string",
+      "default": "Pending",
+      "pattern": "/^(Inactive|Active|Suspended|Pending|Completed)$/",
+      "describe": "Inactive,Active,Suspended,Pending,Completed"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "locations": {
+      "type": "referencesMany",
+      "model": "BoomStore",
+      "foreignKey": "boomStoreIds",
+      "required": true
+    },
+    "cashBack": {
+      "type": "embedsMany",
+      "model": "BoomOfferCashBack",
+      "as": "cashBack",
+      "options": {
+        "validate": true,
+        "forceId": true
+      },
+      "required": true
+    }
+  },
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY",
+      "property": "*",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "find",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "findById",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "exists",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "__get__locations",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "nearby",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "__find__cashBack",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "__findById__cashBack",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "__findById__locations",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner_user",
+      "permission": "ALLOW",
+      "property": "peekNextCashBackLevel",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$admin",
+      "permission": "ALLOW",
+      "property": "*",
+      "model": "BoomOffer"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "$owner",
+      "permission": "ALLOW",
+      "property": "*"
+    }
+  ],
+  "methods": []
+}
